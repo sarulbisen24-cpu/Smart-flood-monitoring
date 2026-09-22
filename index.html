@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FloodGuard | Smart Flood Monitoring</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <header class="navbar">
+    <div class="logo">
+      🌊 FloodGuard
+    </div>
+
+    <div class="system-status">
+      <span class="status-dot"></span>
+      System Online
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <div>
+        <p class="tag">SMART FLOOD MONITORING SYSTEM</p>
+
+        <h1>Monitor. Alert. Protect.</h1>
+
+        <p>
+          Real-time water depth monitoring with flood alerts
+          and route safety information.
+        </p>
+      </div>
+
+      <div class="hero-icon">🌧️</div>
+    </section>
+
+
+    <section class="location-bar">
+
+      <div>
+        <span class="small-label">MONITORING LOCATION</span>
+        <h3>Underpass A</h3>
+      </div>
+
+      <div>
+        <span class="small-label">DATA SOURCE</span>
+        <h3 id="dataSource">Demo Simulation</h3>
+      </div>
+
+      <div>
+        <span class="small-label">LAST UPDATE</span>
+        <h3 id="lastUpdate">--:--:--</h3>
+      </div>
+
+    </section>
+
+
+    <section class="dashboard-grid">
+
+      <div class="card depth-card">
+
+        <div class="card-heading">
+          <h3>Water Depth</h3>
+          <span>📏</span>
+        </div>
+
+        <div class="depth-value">
+          <span id="depthValue">3.0</span>
+          <small>cm</small>
+        </div>
+
+        <p class="muted">Measured water depth</p>
+
+        <div class="progress-track">
+          <div id="depthProgress" class="progress-fill"></div>
+        </div>
+
+        <div class="scale">
+          <span>0 cm</span>
+          <span>20 cm</span>
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-heading">
+          <h3>Flood Status</h3>
+          <span>⚠️</span>
+        </div>
+
+        <div id="levelBadge" class="level-badge low">
+          LOW
+        </div>
+
+        <h2 id="statusTitle">Normal Water Level</h2>
+
+        <p id="statusDescription" class="muted">
+          Water level is within the normal range.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-heading">
+          <h3>Sensor Connection</h3>
+          <span>📡</span>
+        </div>
+
+        <div class="connection-status">
+          <span class="status-dot"></span>
+          <strong id="connectionText">Simulation Active</strong>
+        </div>
+
+        <p class="muted">
+          ESP32 integration will be added later.
+        </p>
+
+        <div class="sensor-details">
+          <p>Sensor: Ultrasonic</p>
+          <p>Device: ESP32</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="card chart-card">
+
+      <div class="section-header">
+        <div>
+          <h2>Water Level Graph</h2>
+          <p class="muted">
+            Water depth over time
+          </p>
+        </div>
+
+        <button id="simulateBtn" class="primary-btn">
+          + Add Water
+        </button>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="waterChart"></canvas>
+      </div>
+
+    </section>
+
+
+    <section class="card">
+
+      <div class="section-header">
+        <div>
+          <h2>🗺️ Route Safety Map</h2>
+          <p class="muted">
+            Demonstration map with simulated road conditions
+          </p>
+        </div>
+
+        <span class="demo-badge">DEMO</span>
+      </div>
+
+      <div class="map-area">
+
+        <div class="map-road road-a">
+          <span>Route A</span>
+        </div>
+
+        <div class="map-road road-b">
+          <span>Route B</span>
+        </div>
+
+        <div class="map-place start-point">
+          📍 Start
+        </div>
+
+        <div class="map-place underpass-point" id="underpassPoint">
+          🌊 Underpass A
+        </div>
+
+        <div class="map-place destination-point">
+          🏁 Destination
+        </div>
+
+        <div id="mapWarning" class="map-warning">
+          ⚠️ Route A: Normal
+        </div>
+
+      </div>
+
+      <div class="route-info">
+
+        <div class="route-box blocked">
+          <h3>🔴 Route A</h3>
+          <p id="routeAStatus">Available</p>
+        </div>
+
+        <div class="route-box safe">
+          <h3>🟢 Route B</h3>
+          <p>Alternative Route</p>
+        </div>
+
+      </div>
+
+      <div id="routeRecommendation" class="recommendation">
+        All demo routes are currently available.
+      </div>
+
+    </section>
+
+
+    <section class="card emergency-card">
+
+      <div class="section-header">
+
+        <div>
+          <h2>🚨 Emergency Response</h2>
+          <p class="muted">
+            Simulated emergency notification system
+          </p>
+        </div>
+
+        <span id="emergencyBadge" class="demo-badge">
+          STANDBY
+        </span>
+
+      </div>
+
+      <div class="emergency-grid">
+
+        <div class="emergency-item">
+          <span>🛟</span>
+          <h3>Rescue Team</h3>
+          <p id="rescueStatus">Standby</p>
+        </div>
+
+        <div class="emergency-item">
+          <span>🏥</span>
+          <h3>Hospital</h3>
+          <p id="hospitalStatus">Standby</p>
+        </div>
+
+      </div>
+
+      <button id="emergencyBtn" class="emergency-btn">
+        Simulate Emergency Alert
+      </button>
+
+      <p id="emergencyMessage" class="emergency-message">
+        No emergency alert has been sent.
+      </p>
+
+    </section>
+
+
+    <section class="card project-info">
+
+      <h2>About FloodGuard</h2>
+
+      <p>
+        FloodGuard is a prototype concept for monitoring water
+        levels in flood-prone areas and displaying route safety
+        information.
+      </p>
+
+      <div class="info-grid">
+
+        <div>
+          <strong>Hardware</strong>
+          <p>ESP32 + Ultrasonic Sensor</p>
+        </div>
+
+        <div>
+          <strong>Communication</strong>
+          <p>Wi-Fi</p>
+        </div>
+
+        <div>
+          <strong>Dashboard</strong>
+          <p>HTML, CSS, JavaScript</p>
+        </div>
+
+        <div>
+          <strong>Alert System</strong>
+          <p>Prototype Simulation</p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    <p>© 2026 FloodGuard | Hackathon Prototype</p>
+  </footer>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
