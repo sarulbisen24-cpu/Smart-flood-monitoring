@@ -1,0 +1,52 @@
+// Swapped pins to match hardware alignment
+const int TRIG_PIN = 18; 
+const int ECHO_PIN = 5;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  
+  // Ensure trigger pin starts LOW
+  digitalWrite(TRIG_PIN, LOW);
+  delay(500);
+  
+  Serial.println("==========================================");
+  Serial.println("  ResiliNet ESP32 Ultrasonic Node Test    ");
+  Serial.println("==========================================");
+}
+
+void loop() {
+  // Clear trigger pin
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(5);
+
+  // Send a precise 10-microsecond HIGH pulse
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  // Read echo pulse with a 30,000 microsecond timeout (~5 meters max)
+  long duration = pulseIn(ECHO_PIN, HIGH, 30000);
+
+  if (duration == 0) {
+    Serial.println("Warning: No echo returned. Verify 5V supply and breadboard row contacts.");
+  } else {
+    // Calculate distance in centimeters
+    float distanceCm = duration * 0.0343 / 2.0;
+
+    Serial.print("Measured Distance: ");
+    Serial.print(distanceCm);
+    Serial.print(" cm | Status: ");
+
+    if (distanceCm <= 5.0) {
+      Serial.println("CRITICAL FLOOD ALERT");
+    } else if (distanceCm <= 10.0) {
+      Serial.println("WARNING - WATER RISING");
+    } else {
+      Serial.println("NORMAL");
+    }
+  }
+
+  delay(1000); // Take readings every 1 second
+}
